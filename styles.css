@@ -1,0 +1,25 @@
+:root {
+  --sano-teal: #0f6e6e;
+  --sano-deep: #0b3f4a;
+  --sano-mint: #e3f3ee;
+  --sano-coral: #ef6f5e;
+  --sano-ink: #1c2b33;
+  --bs-body-font-family: 'Nunito Sans', system-ui, sans-serif;
+  --bs-body-color: var(--sano-ink);
+  --bs-primary: var(--sano-teal);
+  --bs-primary-rgb: 15, 110, 110;
+}
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+h1, h2, h3, h4, .navbar-brand { font-family: 'Fraunces', Georgia, serif; }
+.btn-primary { --bs-btn-bg: var(--sano-teal); --bs-btn-border-color: var(--sano-teal);
+  --bs-btn-hover-bg: var(--sano-deep); --bs-btn-hover-border-color: var(--sano-deep);
+  --bs-btn-active-bg: var(--sano-deep); }
+.btn-coral { background: var(--sano-coral); border-color: var(--sano-coral); color: #fff; }
+.btn-coral:hover { background: #d95a49; border-color: #d95a49; color: #fff; }
+.text-teal { color: var(--sano-teal); }
+.bg-mint { background: var(--sano-mint); }
+section.seccion { padding: 4.5rem 0; }
+.seccion h2 { color: var(--sano-deep); margin-bottom: .5rem; }
+.seccion .lead-sub { color: #5b6b73; max-width: 60ch; margin-bottom: 2.5rem; }
+.card { border: 0; box-shadow: 0 2px 14px rgba(11, 63, 74, .08); }
+:focus-visible { outline: 3px solid var(--sano-coral); outline-offset: 2px; }

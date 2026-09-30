@@ -1,0 +1,115 @@
+<section id="cita" class="seccion">
+  <div class="container">
+    <h2>Reserve su cita</h2>
+    <p class="lead-sub">Complete sus datos y elija la especialidad. Sus citas aparecen abajo.</p>
+
+    <!-- Alerta Bootstrap controlada por un signal -->
+    @if (citaService.alerta(); as a) {
+      <div class="alert alert-dismissible shadow-sm d-flex align-items-center" [class.alert-success]="a.tipo === 'success'" [class.alert-danger]="a.tipo === 'danger'" [class.alert-warning]="a.tipo === 'warning'" role="alert">
+        <span class="me-2 fs-5" aria-hidden="true">
+          {{ a.tipo === 'success' ? '✅' : a.tipo === 'danger' ? '⚠️' : 'ℹ️' }}
+        </span>
+        <div>{{ a.mensaje }}</div>
+        <button type="button" class="btn-close" aria-label="Cerrar" (click)="citaService.cerrarAlerta()"></button>
+      </div>
+    }
+
+    <div class="row g-4">
+      <div class="col-lg-5">
+        <div class="card">
+          <div class="card-body p-4">
+            <form (ngSubmit)="enviar()" novalidate>
+              <div class="mb-3">
+                <label class="form-label" for="nombre">Nombre completo</label>
+                <input id="nombre" name="nombre" class="form-control" [class.is-invalid]="invalido('nombre')"
+                       [ngModel]="nombre()" (ngModelChange)="nombre.set($event)">
+                <div class="invalid-feedback">{{ errores()['nombre'] }}</div>
+              </div>
+
+              <div class="row">
+                <div class="col-6 mb-3">
+                  <label class="form-label" for="dni">DNI</label>
+                  <input id="dni" name="dni" class="form-control" maxlength="8" inputmode="numeric"
+                         [class.is-invalid]="invalido('dni')" [ngModel]="dni()" (ngModelChange)="dni.set($event)">
+                  <div class="invalid-feedback">{{ errores()['dni'] }}</div>
+                </div>
+                <div class="col-6 mb-3">
+                  <label class="form-label" for="telefono">Celular</label>
+                  <input id="telefono" name="telefono" class="form-control" maxlength="9" inputmode="numeric"
+                         [class.is-invalid]="invalido('telefono')" [ngModel]="telefono()" (ngModelChange)="telefono.set($event)">
+                  <div class="invalid-feedback">{{ errores()['telefono'] }}</div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="email">Correo electrónico</label>
+                <input id="email" name="email" type="email" class="form-control"
+                       [class.is-invalid]="invalido('email')" [ngModel]="email()" (ngModelChange)="email.set($event)">
+                <div class="invalid-feedback">{{ errores()['email'] }}</div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-6 mb-3">
+                  <label class="form-label" for="especialidad">Especialidad</label>
+                  <select id="especialidad" name="especialidad" class="form-select"
+                          [class.is-invalid]="invalido('especialidad')" [ngModel]="especialidad()" (ngModelChange)="especialidad.set($event)">
+                    <option value="">Seleccione…</option>
+                    @for (esp of especialidades; track esp) {
+                      <option [value]="esp">{{ esp }}</option>
+                    }
+                  </select>
+                  <div class="invalid-feedback">{{ errores()['especialidad'] }}</div>
+                </div>
+                <div class="col-sm-6 mb-3">
+                  <label class="form-label" for="fecha">Fecha</label>
+                  <input id="fecha" name="fecha" type="date" [min]="fechaMinima" class="form-control"
+                         [class.is-invalid]="invalido('fecha')" [ngModel]="fecha()" (ngModelChange)="fecha.set($event)">
+                  <div class="invalid-feedback">{{ errores()['fecha'] }}</div>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label" for="motivo">Motivo de la consulta (opcional)</label>
+                <textarea id="motivo" name="motivo" rows="3" class="form-control" [ngModel]="motivo()" (ngModelChange)="motivo.set($event)"></textarea>
+              </div>
+
+              <div class="d-grid gap-2 d-sm-flex">
+                <button type="submit" class="btn btn-primary flex-fill">Guardar cita</button>
+                <button type="button" class="btn btn-outline-secondary" (click)="limpiar()">Limpiar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h3 class="h5 mb-0">Citas registradas</h3>
+          <span class="badge text-bg-primary fs-6">{{ citaService.total() }}</span>
+        </div>
+
+        @if (citaService.total() === 0) {
+          <div class="alert alert-light border">Aún no hay citas. Complete el formulario para registrar la primera.</div>
+        } @else {
+          <div class="row g-3">
+            @for (c of citaService.citas(); track c.id) {
+              <div class="col-12 col-md-6">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h4 class="h6 mb-1">{{ c.nombre }}</h4>
+                    <span class="badge text-bg-primary mb-2">{{ c.especialidad }}</span>
+                    <p class="small mb-1">📅 {{ c.fecha }}</p>
+                    <p class="small mb-1">📞 {{ c.telefono }} · DNI {{ c.dni }}</p>
+                    <p class="small mb-1">✉️ {{ c.email }}</p>
+                    @if (c.motivo) { <p class="small text-secondary mb-2">{{ c.motivo }}</p> }
+                    <button class="btn btn-sm btn-outline-danger" (click)="citaService.eliminar(c.id)">Eliminar</button>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>
